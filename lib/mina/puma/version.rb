@@ -1,5 +1,5 @@
 module Mina
   module Puma
-    VERSION = "1.0.1"
+    VERSION = "0.3.3"
   end
 end
