@@ -14,7 +14,7 @@ namespace :puma do
   set :pumactl_cmd,    -> { "#{fetch(:bundle_prefix)} pumactl" }
   set :pumactl_socket, -> { "#{fetch(:shared_path)}/tmp/sockets/pumactl.sock" }
   set :puma_root_path, -> { fetch(:current_path) }
-  set :is_puma_running, -> { 'ps -ef | grep $(cat "#{fetch(:puma_state)}" | grep pid | awk \'{print $2}\') | grep "#{fetch(:puma_socket)}" ' }
+  #set :is_puma_running, -> { 'ps -ef | grep $(cat "#{fetch(:puma_state)}" | grep pid | awk \'{print $2}\') | grep "#{fetch(:puma_socket)}" ' }
 
   desc 'Start puma'
   task :start => :environment do
@@ -22,7 +22,7 @@ namespace :puma do
 
     comment "Starting Puma..."
     command %[
-      if [ -e "#{fetch(:pumactl_socket)}" -a "#{fetch(:is_puma_running)}" != ""  ]; then
+      if [ -e "#{fetch(:pumactl_socket)}" ]; then
         echo 'Puma is already running!';
       else
         if [ -e "#{fetch(:puma_config)}" ]; then
