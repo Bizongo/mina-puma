@@ -14,7 +14,6 @@ namespace :puma do
   set :pumactl_cmd,    -> { "#{fetch(:bundle_prefix)} pumactl" }
   set :pumactl_socket, -> { "#{fetch(:shared_path)}/tmp/sockets/pumactl.sock" }
   set :puma_root_path, -> { fetch(:current_path) }
-  #set :is_puma_running, -> { 'ps -ef | grep $(cat "#{fetch(:puma_state)}" | grep pid | awk \'{print $2}\') | grep "#{fetch(:puma_socket)}" ' }
 
   desc 'Start puma'
   task :start => :environment do
