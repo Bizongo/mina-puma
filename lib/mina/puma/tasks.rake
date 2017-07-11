@@ -13,14 +13,16 @@ namespace :puma do
   set_default :puma_cmd,       -> { "#{bundle_prefix} puma" }
   set_default :pumactl_cmd,    -> { "#{bundle_prefix} pumactl" }
   set_default :pumactl_socket, -> { "#{deploy_to}/#{shared_path}/tmp/sockets/pumactl.sock" }
-  set_default :is_puma_running, -> { "ps -ef | grep $(cat \"#{puma_state}\" | grep pid | awk '{print $2}') | grep \"#{puma_socket}\" " }
+  #set_default :is_puma_running, -> { "ps -ef | grep $(cat \"#{puma_state}\" | grep pid | awk '{print $2}') | grep \"#{puma_socket}\" " }
 
   desc 'Start puma'
   task :start => :environment do
     puma_port_option = "-p #{puma_port}" if puma_port
 
     queue! %[
-      if [ -e '#{pumactl_socket}' -a $(#{is_puma_running}) != "" ]; then
+      server_puma_pid=$(cat '#{puma_state}' | grep pid | awk '{print $2}')
+      server_puma_running_status=$(ps -ef | grep $server_puma_pid | grep '#{puma_socket}')
+      if [ -e '#{pumactl_socket}' -a "$server_puma_running_status" != "" ]; then
         echo 'Puma is already running!';
       else
         if [ -e '#{puma_config}' ]; then
