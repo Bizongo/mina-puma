@@ -21,7 +21,7 @@ namespace :puma do
     puma_port_option = "-p #{puma_port}" if puma_port
 
     queue! %[
-      if [ -e '#{pumactl_socket}' -a "#{is_puma_running}" != "" ]; then
+      if [ -e '#{pumactl_socket}' ]; then
         echo 'Puma is already running!';
       else
         if [ -e '#{puma_config}' ]; then
