@@ -79,7 +79,9 @@ namespace :puma do
 
   def pumactl_command(command, or_start = false)
     queue! %[
-      if [ -e '#{pumactl_socket}' ]; then
+      server_puma_pid=$(cat '#{puma_state}' | grep pid | awk '{print $2}')
+      server_puma_running_status=$(ps -ef | grep $server_puma_pid | grep '#{puma_socket}')
+      if [ -e '#{pumactl_socket}' -a "$server_puma_running_status" != "" ]; then
         if [ -e '#{puma_config}' ]; then
           cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -F #{puma_config} #{command}
         else
